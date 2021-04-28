@@ -24,6 +24,6 @@ public class Fantasma : MonoBehaviour
 
     public void BuscaCantante()
     {
-
+        print("DONETE");
     }
 }
