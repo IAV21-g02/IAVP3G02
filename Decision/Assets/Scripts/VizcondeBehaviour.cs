@@ -6,6 +6,10 @@ public class VizcondeBehaviour : MonoBehaviour
 {
     //Public
     public float force = 2500.0f;
+    public Camera ghostCamera;
+    public Camera singerCamera;
+    public Camera selfCamera;
+    public GameObject mainCamera;
 
     //Private
     private Rigidbody rb;
@@ -18,6 +22,7 @@ public class VizcondeBehaviour : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        mainCamera.SetActive(false);
     }
 
     private void FixedUpdate()
@@ -34,15 +39,8 @@ public class VizcondeBehaviour : MonoBehaviour
         rot.x = Input.GetAxis("Horizontal");
         m_EulerAngleVelocity.y = rot.x * 100;
 
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            //Anterior Camara
-            ChangeCamera(false);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            //Siguiente Camara
-            ChangeCamera(true);
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            ChangeCamera();
         }
     }
 
@@ -96,15 +94,22 @@ public class VizcondeBehaviour : MonoBehaviour
         }
     }
 
-    private void ChangeCamera(bool next)
+    private void ChangeCamera()
     {
-        if (next)
+        //Si esta activa
+        if (mainCamera.active)
         {
-
+            mainCamera.active = false;
+            ghostCamera.enabled = true;
+            singerCamera.enabled = true;
+            selfCamera.enabled = true;
         }
         else
         {
-
+            mainCamera.active = true;
+            ghostCamera.enabled = false;
+            singerCamera.enabled = false;
+            selfCamera.enabled = false;
         }
     }
 }
