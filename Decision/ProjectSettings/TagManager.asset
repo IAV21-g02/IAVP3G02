@@ -8,6 +8,9 @@ TagManager:
   - objetivo
   - palanca
   - Escenario
+  - Publico
+  - Fantasma
+  - Celda
   layers:
   - Default
   - TransparentFX

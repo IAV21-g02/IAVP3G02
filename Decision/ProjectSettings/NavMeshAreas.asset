@@ -29,7 +29,7 @@ NavMeshProjectSettings:
     cost: 1
   - name: 
     cost: 1
-  - name: 
+  - name: Vestibulo
     cost: 1
   - name: 
     cost: 1
@@ -39,7 +39,7 @@ NavMeshProjectSettings:
     cost: 1
   - name: Bambalinas
     cost: 1
-  - name: 
+  - name: Butacas
     cost: 1
   - name: Tuberias
     cost: 1
