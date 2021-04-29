@@ -11,6 +11,8 @@ TagManager:
   - Publico
   - Fantasma
   - Celda
+  - objetivoEscenario
+  - Vizconde
   layers:
   - Default
   - TransparentFX
