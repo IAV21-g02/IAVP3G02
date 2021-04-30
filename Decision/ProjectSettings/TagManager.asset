@@ -13,6 +13,8 @@ TagManager:
   - Celda
   - objetivoEscenario
   - Vizconde
+  - objetivoBarca1
+  - objetivoBarca2
   layers:
   - Default
   - TransparentFX
