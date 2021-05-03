@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Bolt;
+using Ludiq;
+
 
 public class VizcondeBehaviour : MonoBehaviour
 {
@@ -10,6 +13,8 @@ public class VizcondeBehaviour : MonoBehaviour
     public Camera singerCamera;
     public Camera selfCamera;
     public GameObject mainCamera;
+    public GameObject palancaEste;
+    public GameObject palancaOeste;
 
     //Private
     private Rigidbody rb;
@@ -65,16 +70,27 @@ public class VizcondeBehaviour : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         GameObject obj = other.gameObject;
-        if (obj.tag == "PalancaLampara" && Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E)) 
         {
+            if (obj.CompareTag("Lampara") && obj.GetComponent<Rigidbody>().useGravity) 
+            {
+                obj.GetComponent<Rigidbody>().useGravity = false;
+                obj.transform.position = obj.GetComponentInParent<Transform>().position;
+                int numLamparas = (int)Variables.Application.Get("LamparasCaidas");
+                numLamparas--;
+                Variables.Application.Set("LamparasCaidas", numLamparas);    
+            }
+            else if (obj.CompareTag("Celda"))
+            {
+                //Para abrir la celda
+                //obj.GetComponent<ComportamientoCelda>().Abrir();
+            }
+            else if (obj.GetComponent<PalancaBarca>())
+            {
+                obj.GetComponent<PalancaBarca>().TraeBarca();
+            }
             //Recoloca lampara
             //obj.GetComponent<ComportamientoLampara>().setLamparaCaida(true);
-
-        }
-        else if (obj.tag == "Celda" && Input.GetKeyDown(KeyCode.E))
-        {
-            //Para abrir la celda
-            //obj.GetComponent<ComportamientoCelda>().Abrir();
         }
     }
 

@@ -15,6 +15,7 @@ TagManager:
   - Vizconde
   - objetivoBarca1
   - objetivoBarca2
+  - Lampara
   layers:
   - Default
   - TransparentFX
@@ -24,8 +25,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Lampara
+  - Publico
   - 
   - 
   - 
