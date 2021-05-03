@@ -7,12 +7,18 @@ public class BarcaComportamiento : MonoBehaviour
 {
     private NavMeshAgent navMesh;
     private Transform otherGameObject;
-    public Transform Objectivo1;
-    public Transform Objectivo2;
+    public Transform Objetivo1;
+    public Transform Objetivo2;
     //  True si la barca está en el objetivo 1 : false objetivo 2
     private bool Estado = true;
-    private bool EnBarca = false;
     private bool reposo;
+    private Character personaje = Character.None;
+    private GameObject currentCharacter = null;
+
+    enum Character
+    {
+        Fantasma, Vizconde, None
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -24,45 +30,93 @@ public class BarcaComportamiento : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         otherGameObject = other.gameObject.transform;
-        if ( !EnBarca && other.CompareTag("Fantasma") || other.CompareTag("Vizconde")) 
+        if ( personaje == Character.None && other.CompareTag("Fantasma") || other.CompareTag("Vizconde")) 
         {
-            EnBarca = true;
+            Debug.Log("Se sube personaje");
+            currentCharacter = otherGameObject.gameObject;
+            navMesh.enabled = true;
+
+            if (other.CompareTag("Fantasma")) personaje = Character.Fantasma;
+            else personaje = Character.Vizconde;
+
+            otherGameObject.GetComponent<Rigidbody>().isKinematic = true;
+            if(personaje == Character.Fantasma) otherGameObject.GetComponent<NavMeshAgent>().enabled = false;
+            
             mueveBarca(Estado);
         }
-        else if (other.CompareTag("objetivoBarca1"))
+        else if (other.CompareTag("objetivoBarca1")&& !Estado)
         {
+            Debug.Log("OBEJTIVO 1");
+
             Estado = true;
-            EnBarca = false;
-            otherGameObject.SetPositionAndRotation(otherGameObject.position + Objectivo1.forward * 5, Quaternion.identity);
             reposo = true;
+            navMesh.enabled = false;
+
+            //Soltamos personaje
+            if (currentCharacter != null)
+            {
+                Debug.Log("Dejamos personaje");
+                currentCharacter.transform.position = otherGameObject.position + Objetivo1.forward * 10;
+                //currentCharacter.transform.SetPositionAndRotation(otherGameObject.position + Objectivo2.forward * 10, Quaternion.identity);
+                currentCharacter.GetComponent<Rigidbody>().isKinematic = false;
+                if (personaje == Character.Fantasma) currentCharacter.GetComponent<NavMeshAgent>().enabled = true;
+            }
+            personaje = Character.None;
+            currentCharacter = null;
+
         }
-        else if (other.CompareTag("objetivoBarca2"))
+        else if (other.CompareTag("objetivoBarca2")&& Estado)
         {
             Estado = false;
-            EnBarca = false;
-            otherGameObject.SetPositionAndRotation(otherGameObject.position + Objectivo2.forward * 5, Quaternion.identity);
             reposo = true;
+            navMesh.enabled = false;
+
+            Debug.Log("OBEJTIVO 2");
+            //Soltamos personaje
+            if (currentCharacter != null)
+            {
+                Debug.Log("Dejamos personaje");
+                currentCharacter.transform.position = otherGameObject.position + Objetivo2.forward * 10;
+                //currentCharacter.transform.SetPositionAndRotation(, Quaternion.identity);
+                currentCharacter.GetComponent<Rigidbody>().isKinematic = false;
+                if (personaje == Character.Fantasma) currentCharacter.GetComponent<NavMeshAgent>().enabled = true;
+            }
+            personaje = Character.None;
+            currentCharacter = null;
         }
     }
 
     private void Update()
     {
-        if (EnBarca)
+        if (personaje != Character.None && currentCharacter != null )
         {
-            otherGameObject.SetPositionAndRotation(transform.position + new Vector3(0, 3, 0), Quaternion.identity);
+            currentCharacter.transform.SetPositionAndRotation(transform.position + new Vector3(0, 3, 0), Quaternion.identity);
         }
     }
 
     public void mueveBarca(bool status)
     {
+        Debug.Log("Llamada a mueveBarca");
+        reposo = false;
+        navMesh.enabled = true;
+
         if (status)
         {
-            navMesh.SetDestination(Objectivo2.position);
+            Estado = true;
+            Debug.Log(Objetivo2.position);
+            navMesh.SetDestination(Objetivo2.position);
         }
         else
         {
-            navMesh.SetDestination(Objectivo1.position);
+            Estado = false;
+            Debug.Log(Objetivo1.position);
+            navMesh.SetDestination(Objetivo1.position);
         }
+    }
+
+    public bool getEstadoBarca()
+    {
+        return Estado;
     }
 
     public bool barcaEnReposo()

@@ -19,7 +19,7 @@ public class PalancaBarca : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if ( bC.barcaEnReposo() && other.CompareTag("Fantasma") || other.CompareTag("Vizconde"))
+        if ( bC.barcaEnReposo() && other.CompareTag("Fantasma") || other.CompareTag("Vizconde") && bC.getEstadoBarca() == Estado)
         {
             bC.mueveBarca(Estado);
         }
