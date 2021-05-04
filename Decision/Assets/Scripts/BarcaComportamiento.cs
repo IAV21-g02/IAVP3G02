@@ -9,6 +9,9 @@ public class BarcaComportamiento : MonoBehaviour
     private Transform otherGameObject;
     public Transform Objetivo1;
     public Transform Objetivo2;
+    public PalancaBarca palancaBarca1;
+    public PalancaBarca palancaBarca2;
+
     //  True si la barca está en el objetivo 1 : false objetivo 2
     private bool Estado = true;
     private bool reposo;
@@ -116,4 +119,12 @@ public class BarcaComportamiento : MonoBehaviour
     {
         return reposo;
     }
+
+    public PalancaBarca GetPalancaBarca1() { return palancaBarca1; }
+    public PalancaBarca GetPalancaBarca2() { return palancaBarca2; }
+
+    public Transform GetObjetivo1() { return Objetivo1; }
+    public Transform GetObjetivo2() { return Objetivo2; }
+
+
 }
