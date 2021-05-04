@@ -98,7 +98,7 @@ public class Fantasma : MonoBehaviour
     public void CalculaCamino(Transform pos)
     {
         if (salaActual.gameObject == salaObj) { 
-            path
+
         }
 
     }
