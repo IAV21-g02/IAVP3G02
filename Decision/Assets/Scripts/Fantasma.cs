@@ -73,4 +73,15 @@ public class Fantasma : MonoBehaviour
         }
     }
 
+    public void eligeCamino(Transform pos)
+    {
+        int actCoste = 0;
+        for (int i = 0; i < barcas.Length; i++)
+        {
+            if (estado[i]) actCoste += 1;
+            else actCoste += 5;
+            
+        }
+    }
+
 }

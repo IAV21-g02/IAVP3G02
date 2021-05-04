@@ -10,23 +10,14 @@ public struct barcasSala{
 
 public class SalaBehaviour : MonoBehaviour
 {
+    //  Barcas de la sala
     public GameObject[] barcas;
+    //  Si es el estado es true -> la barca está en esta sala
     public bool[] estado;
-
-    public GameObject[] objetivos;
     public bool[] estadoActivoBarca;
-    public string navNombreSala;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    //  Objetivos a los que las barcas se mueven desde esta sala
+    public GameObject[] objetivosActivos;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     bool hayBarca(GameObject barca,int index)
     {
@@ -58,5 +49,16 @@ public class SalaBehaviour : MonoBehaviour
                 return;
             }
         }
+    }
+
+    public barcasSala[] getBarcasSala()
+    {
+        barcasSala[] actBarcas = new barcasSala[barcas.Length];
+        for (int i = 0; i < barcas.Length; i++)
+        {
+            actBarcas[i].barca = barcas[i];
+            actBarcas[i].estado = estado[i];
+        }
+        return actBarcas;
     }
 }
