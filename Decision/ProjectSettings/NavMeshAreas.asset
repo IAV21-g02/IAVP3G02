@@ -45,15 +45,15 @@ NavMeshProjectSettings:
     cost: 1
   - name: SotanoNorte
     cost: 1
-  - name: 
+  - name: SotanoOeste
     cost: 1
   - name: 
     cost: 1
-  - name: 
+  - name: SalaMusica
     cost: 1
   - name: 
     cost: 1
-  - name: 
+  - name: SotanoEste
     cost: 1
   - name: 
     cost: 1

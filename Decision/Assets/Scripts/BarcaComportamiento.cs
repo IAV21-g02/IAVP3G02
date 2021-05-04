@@ -63,6 +63,7 @@ public class BarcaComportamiento : MonoBehaviour
             }
             personaje = Character.None;
             currentCharacter = null;
+            other.gameObject.GetComponentInParent<SalaBehaviour>().actualizaSala(gameObject);
 
         }
         else if (other.CompareTag("objetivoBarca2")&& Estado)
