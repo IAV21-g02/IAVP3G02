@@ -72,6 +72,7 @@ public class VizcondeBehaviour : MonoBehaviour
         GameObject obj = other.gameObject;
         if (Input.GetKeyDown(KeyCode.E)) 
         {
+            //Recoloca lampara
             if (obj.CompareTag("Lampara") && obj.GetComponent<Rigidbody>().useGravity) 
             {
                 obj.GetComponent<Rigidbody>().useGravity = false;
@@ -89,8 +90,6 @@ public class VizcondeBehaviour : MonoBehaviour
             {
                 obj.GetComponent<PalancaBarca>().TraeBarca();
             }
-            //Recoloca lampara
-            //obj.GetComponent<ComportamientoLampara>().setLamparaCaida(true);
         }
     }
 

@@ -2,63 +2,76 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public struct barcasSala{
+[System.Serializable]
+public class conexion
+{
     public GameObject barca;
-    public bool estado;
+    public GameObject salaVecina;
+    //true -> Se puede ir desde esta sala a la sala Vecina
+    public bool conectado;
 }
 
 public class SalaBehaviour : MonoBehaviour
 {
     //  Barcas de la sala
-    public GameObject[] barcas;
-    //  Si es el estado es true -> la barca está en esta sala
-    public bool[] estado;
-    public bool[] estadoActivoBarca;
-    //  Objetivos a los que las barcas se mueven desde esta sala
-    public GameObject[] objetivosActivos;
+    //public GameObject[] barcas;
+    ////  Si es el estado es true -> la barca está en esta sala
+    public bool[] conex;
+    ////A que salas puede ir desde la sala actual
+    //public GameObject[] salasVecinas;
 
+    public conexion[] conexiones;
 
-    bool hayBarca(GameObject barca,int index)
+    private void Start()
     {
-        if (estadoActivoBarca[index] == barca.GetComponent<BarcaComportamiento>().getEstadoBarca()) return true;
-        else return false;
+
     }
 
-    private void OnCollisionEnter(Collision collision)
+    bool hayBarca(GameObject barca, int index)
     {
-        if (collision.gameObject.CompareTag("Fantasma"))
+        return conex[index] == barca.GetComponent<BarcaComportamiento>().getEstadoBarca();
+    }
+
+    private void actualizaSala()
+    {
+        //Se actualizan las conexiones de la sala en función de 
+        //si la barca está o no en el muelle de la sala
+        for (int i = 0; i < conexiones.Length; i++)
         {
-            barcasSala[] barcasInfo = new barcasSala[barcas.Length];
-            for (int i = 0; i < barcas.Length; i++)
-            {
-                barcasInfo[i].barca = barcas[i];
-                barcasInfo[i].estado = estado[i];
+            conexiones[i].conectado = hayBarca(conexiones[i].barca, i);
+        }
+    }
+
+    //Devuelve las salas vecinas accesibles de la sala actual
+    public GameObject[] ConsultaVecinos (){
+        actualizaSala();
+        GameObject[] salasV = new GameObject[conexiones.Length];
+        for (int i = 0; i < conexiones.Length; i++) {
+            if (conexiones[i].conectado) {
+                salasV[i] = conexiones[i].salaVecina;
             }
-            collision.gameObject.GetComponent<Fantasma>().actualizaBarcas(barcasInfo);
         }
+
+        return salasV;
     }
 
-    public void actualizaSala(GameObject barca)
-    {
-        for (int i = 0; i < barcas.Length; i++)
-        {
-            if (barcas[i].Equals(barca))
-            {
-                estado[i] = true;
-                return;
+    /// <summary>
+    /// A qué tubería hay que ir
+    /// </summary>
+    /// <param name="conectado">
+    /// Para saber si hay que llamar a la barca 
+    /// o ya está disponible
+    /// </param>
+    /// <returns></returns>
+    public GameObject BarcaDisponible (GameObject salaDest, out bool conectado){
+        for (int i = 0; i < conexiones.Length; i++) {
+            if (salaDest == conexiones[i].salaVecina) {
+                conectado = conexiones[i].conectado;
+                return conexiones[i].barca;
             }
         }
-    }
 
-    public barcasSala[] getBarcasSala()
-    {
-        barcasSala[] actBarcas = new barcasSala[barcas.Length];
-        for (int i = 0; i < barcas.Length; i++)
-        {
-            actBarcas[i].barca = barcas[i];
-            actBarcas[i].estado = estado[i];
-        }
-        return actBarcas;
+        conectado = false;
+        return null;
     }
 }

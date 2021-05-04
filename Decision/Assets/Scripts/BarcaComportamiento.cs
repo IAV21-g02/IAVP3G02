@@ -32,7 +32,6 @@ public class BarcaComportamiento : MonoBehaviour
         otherGameObject = other.gameObject.transform;
         if ( personaje == Character.None && other.CompareTag("Fantasma") || other.CompareTag("Vizconde")) 
         {
-            Debug.Log("Se sube personaje");
             currentCharacter = otherGameObject.gameObject;
             navMesh.enabled = true;
 
@@ -46,8 +45,6 @@ public class BarcaComportamiento : MonoBehaviour
         }
         else if (other.CompareTag("objetivoBarca1")&& !Estado)
         {
-            Debug.Log("OBEJTIVO 1");
-
             Estado = true;
             reposo = true;
             navMesh.enabled = false;
@@ -55,15 +52,13 @@ public class BarcaComportamiento : MonoBehaviour
             //Soltamos personaje
             if (currentCharacter != null)
             {
-                Debug.Log("Dejamos personaje");
                 currentCharacter.transform.position = otherGameObject.position + Objetivo1.forward * 10;
-                //currentCharacter.transform.SetPositionAndRotation(otherGameObject.position + Objectivo2.forward * 10, Quaternion.identity);
                 currentCharacter.GetComponent<Rigidbody>().isKinematic = false;
                 if (personaje == Character.Fantasma) currentCharacter.GetComponent<NavMeshAgent>().enabled = true;
             }
             personaje = Character.None;
             currentCharacter = null;
-            other.gameObject.GetComponentInParent<SalaBehaviour>().actualizaSala(gameObject);
+            //other.gameObject.GetComponentInParent<SalaBehaviour>().actualizaSala(gameObject);
 
         }
         else if (other.CompareTag("objetivoBarca2")&& Estado)
@@ -76,9 +71,7 @@ public class BarcaComportamiento : MonoBehaviour
             //Soltamos personaje
             if (currentCharacter != null)
             {
-                Debug.Log("Dejamos personaje");
                 currentCharacter.transform.position = otherGameObject.position + Objetivo2.forward * 10;
-                //currentCharacter.transform.SetPositionAndRotation(, Quaternion.identity);
                 currentCharacter.GetComponent<Rigidbody>().isKinematic = false;
                 if (personaje == Character.Fantasma) currentCharacter.GetComponent<NavMeshAgent>().enabled = true;
             }
@@ -97,7 +90,6 @@ public class BarcaComportamiento : MonoBehaviour
 
     public void mueveBarca(bool status)
     {
-        Debug.Log("Llamada a mueveBarca");
         reposo = false;
         navMesh.enabled = true;
 
