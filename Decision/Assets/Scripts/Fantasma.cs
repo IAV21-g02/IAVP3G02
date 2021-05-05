@@ -9,7 +9,7 @@ using Ludiq;
 
 public enum Estado : int
 {
-    BuscandoCantante, Secuestrando, TocandoMusica, RepararMuebles, Noqueado
+    BuscandoCantante, Secuestrando, TocandoMusica, RepararMuebles, Noqueado, EnBarca
 };
 
 [System.Serializable]
@@ -48,10 +48,19 @@ public class Fantasma : MonoBehaviour
 
     public void OnCollisionEnter(Collision collision)
     {
-        //Se guarda la sala en la que se entra
-        if (collision.gameObject.GetComponent<SalaBehaviour>())
+        if (collision.gameObject.CompareTag("Sala") || collision.gameObject.CompareTag("Escenario")) 
         {
-            salaActual = collision.gameObject.GetComponent<SalaBehaviour>();
+            //Se guarda la sala en la que se entra
+            if (collision.gameObject.GetComponent<SalaBehaviour>())
+            {
+                salaActual = collision.gameObject.GetComponent<SalaBehaviour>();
+                behaviorTree.SetVariableValue("EstoyEnSalaBehaviour", true);
+            }
+            else behaviorTree.SetVariableValue("EstoyEnSalaBehaviour", false);
+        }
+        else if (collision.gameObject.CompareTag("Cantante")) 
+        {
+            setFantasmaEstado(1);
         }
     }
 
@@ -62,9 +71,20 @@ public class Fantasma : MonoBehaviour
 
     public void puedoIrCaminando(Transform pos)
     {
-        NavMeshPath path = new NavMeshPath();
-        bool hayPath = navMeshAgent.CalculatePath(pos.position, path);
-        behaviorTree.SetVariableValue("PuedoIrCaminando", hayPath);
+        if (navMeshAgent.isActiveAndEnabled)
+        {
+            NavMeshPath path = new NavMeshPath();
+            bool hayPath;
+            NavMesh.CalculatePath(transform.position, pos.position, navMeshAgent.areaMask, path);
+            //Debug.Log("path " + path.corners[path.corners.Length - 1]);
+            //Debug.Log("pos " + pos.position);
+            if ((path.corners[path.corners.Length - 1] - pos.position).magnitude < 0.5)
+            {
+                hayPath = true;
+            }
+            else hayPath = false;
+            behaviorTree.SetVariableValue("PuedoIrCaminando", hayPath);
+        }
     }
     
 
@@ -108,7 +128,7 @@ public class Fantasma : MonoBehaviour
         if (path.Count == 0)
         {
             objetoBarca = salaActual.BarcaDisponible(salaDestino, out sentido);
-            if (!sentido)
+            if (!sentido && objetoBarca)
             {
                 BarcaComportamiento b = objetoBarca.GetComponent<BarcaComportamiento>();
 
@@ -131,7 +151,7 @@ public class Fantasma : MonoBehaviour
         else
         {
             objetoBarca = path[0].GetComponent<SalaBehaviour>().BarcaDisponible(salaDestino.gameObject, out sentido);
-            if (sentido)
+            if (sentido && navMeshAgent.isActiveAndEnabled)
             {
                 BarcaComportamiento b = objetoBarca.GetComponent<BarcaComportamiento>();
 
@@ -211,4 +231,50 @@ public class Fantasma : MonoBehaviour
 
     }
 
+    public void liberaCantante()
+    {
+        Variables.Application.Set("Secuestrada", false);
+    }
+
+    public void setFantasmaEstado(int nuEstado)
+    {
+        var estadoAnterior = behaviorTree.GetVariable("Estado");
+        behaviorTree.SetVariableValue("EstadoAnterior", estadoAnterior);
+        behaviorTree.SetVariableValue("Estado", nuEstado);
+    }
+
+    public void setFantasmaEstado(SharedInt nuEstado)
+    {
+        SharedInt newEstado = new SharedInt();
+        newEstado.SetValue(nuEstado.Value);
+        behaviorTree.SetVariableValue("EstadoAnterior", behaviorTree.GetVariable("Estado"));
+        behaviorTree.SetVariableValue("Estado", newEstado);
+    }
+
+    public SharedInt getEstadoAnterior()
+    {
+        var estadoAnterior = behaviorTree.GetVariable("EstadoAnterior");
+        return (SharedInt)estadoAnterior;
+    }
+
+    public void irAlSotanoCercano(GameObject sotanoEste, GameObject sotanoOeste)
+    {
+        NavMeshPath path = new NavMeshPath();
+        navMeshAgent.SetDestination(sotanoEste.transform.position);
+        float distancePalancaEste = navMeshAgent.remainingDistance;
+        navMeshAgent.SetDestination(sotanoOeste.transform.position);
+        float distancePalancaOeste = navMeshAgent.remainingDistance;
+
+        if (distancePalancaEste <= distancePalancaOeste)
+        {
+            navMeshAgent.SetDestination(sotanoEste.transform.position);
+        }
+        else navMeshAgent.SetDestination(sotanoOeste.transform.position);
+    }
+
+    public void setCantanteAtrapada()
+    {
+        behaviorTree.SetVariableValue("Atrapada", true);
+    }
+    
 }

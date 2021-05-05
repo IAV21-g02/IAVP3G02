@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+
+
 public class BarcaComportamiento : MonoBehaviour
 {
     private NavMeshAgent navMesh;
@@ -11,6 +13,7 @@ public class BarcaComportamiento : MonoBehaviour
     public Transform Objetivo2;
     public PalancaBarca palancaBarca1;
     public PalancaBarca palancaBarca2;
+
 
     //  True si la barca está en el objetivo 1 : false objetivo 2
     private bool Estado = true;
@@ -42,8 +45,11 @@ public class BarcaComportamiento : MonoBehaviour
             else personaje = Character.Vizconde;
 
             otherGameObject.GetComponent<Rigidbody>().isKinematic = true;
-            if(personaje == Character.Fantasma) otherGameObject.GetComponent<NavMeshAgent>().enabled = false;
-            
+            if (personaje == Character.Fantasma)
+            {
+                otherGameObject.GetComponent<NavMeshAgent>().enabled = false;
+                otherGameObject.GetComponent<Fantasma>().setFantasmaEstado(5);
+            }
             mueveBarca(Estado);
         }
         else if (other.CompareTag("objetivoBarca1")&& !Estado)
@@ -57,7 +63,12 @@ public class BarcaComportamiento : MonoBehaviour
             {
                 currentCharacter.transform.position = otherGameObject.position + Objetivo1.forward * 10;
                 currentCharacter.GetComponent<Rigidbody>().isKinematic = false;
-                if (personaje == Character.Fantasma) currentCharacter.GetComponent<NavMeshAgent>().enabled = true;
+                if (personaje == Character.Fantasma)
+                {
+                    Fantasma fantasmita = currentCharacter.GetComponent<Fantasma>();
+                    currentCharacter.GetComponent<NavMeshAgent>().enabled = true;
+                    fantasmita.setFantasmaEstado(fantasmita.getEstadoAnterior());
+                }
             }
             personaje = Character.None;
             currentCharacter = null;
@@ -76,7 +87,12 @@ public class BarcaComportamiento : MonoBehaviour
             {
                 currentCharacter.transform.position = otherGameObject.position + Objetivo2.forward * 10;
                 currentCharacter.GetComponent<Rigidbody>().isKinematic = false;
-                if (personaje == Character.Fantasma) currentCharacter.GetComponent<NavMeshAgent>().enabled = true;
+                if (personaje == Character.Fantasma)
+                {
+                    Fantasma fantasmita = currentCharacter.GetComponent<Fantasma>();
+                    fantasmita.setFantasmaEstado(fantasmita.getEstadoAnterior());
+                    currentCharacter.GetComponent<NavMeshAgent>().enabled = true;
+                }
             }
             personaje = Character.None;
             currentCharacter = null;

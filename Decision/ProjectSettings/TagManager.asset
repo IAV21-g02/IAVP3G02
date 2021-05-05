@@ -16,6 +16,8 @@ TagManager:
   - objetivoBarca1
   - objetivoBarca2
   - Lampara
+  - Cantante
+  - Sala
   layers:
   - Default
   - TransparentFX
