@@ -1,15 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using BehaviorDesigner.Runtime;
 using System;
 using UnityEngine.AI;
+using BehaviorDesigner.Runtime;
 using Bolt;
 using Ludiq;
 
 public enum Estado : int
 {
-    BuscandoCantante, Secuestrando, TocandoMusica, RepararMuebles, Noqueado, EnBarca
+    BuscandoCantante, Secuestrando, TocandoMusica, RepararMuebles, Noqueado, EnBarca, EnCamino
 };
 
 [System.Serializable]
@@ -268,8 +268,13 @@ public class Fantasma : MonoBehaviour
         if (distancePalancaEste <= distancePalancaOeste)
         {
             navMeshAgent.SetDestination(sotanoEste.transform.position);
+            behaviorTree.SetVariableValue("GoToSala", sotanoEste);
         }
-        else navMeshAgent.SetDestination(sotanoOeste.transform.position);
+        else{
+            navMeshAgent.SetDestination(sotanoOeste.transform.position);
+            behaviorTree.SetVariableValue("GoToSala", sotanoOeste);
+
+        }
     }
 
     public void setCantanteAtrapada()
