@@ -25,6 +25,7 @@ public class Fantasma : MonoBehaviour
     public int Estado = 0;
     public List<GameObject> path;
     public salaVisitada[] salas;
+    public SalaBehaviour salaInicial;
 
     private NavMeshAgent navMeshAgent;
     private SalaBehaviour salaActual;
@@ -37,6 +38,7 @@ public class Fantasma : MonoBehaviour
     {
         behaviorTree.SetVariableValue("Estado", Estado);
         navMeshAgent = GetComponent<NavMeshAgent>();
+        salaActual = salaInicial;
     }
 
     // Update is called once per frame
@@ -60,8 +62,11 @@ public class Fantasma : MonoBehaviour
 
     public void puedoIrCaminando(Transform pos)
     {
-        behaviorTree.SetVariableValue("PuedoIrCaminando", navMeshAgent.CalculatePath(pos.position, navMeshAgent.path));
+        NavMeshPath path = new NavMeshPath();
+        bool hayPath = navMeshAgent.CalculatePath(pos.position, path);
+        behaviorTree.SetVariableValue("PuedoIrCaminando", hayPath);
     }
+    
 
     public void IrPalancaLuzCercana(Transform palancaEste, Transform palancaOeste)
     {
@@ -83,16 +88,16 @@ public class Fantasma : MonoBehaviour
         salaObj = salaD;
     }
 
-    public void EligeCamino(SalaBehaviour salaDestino)
+    public void EligeCamino(GameObject salaDestino)
     {
         //Reiniciamos antes de calcular el camino a seguir (Nodos de salas)
         reiniciaBusqueda();
 
-        if (salaActual == null) { Debug.Log("La liaste parda con las salas amigo"); return; }
+        if (!salaDestino.GetComponent<SalaBehaviour>()) { Debug.Log("La liaste parda con las salas amigo"); return; }
 
         List<GameObject> path = new List<GameObject>();
         //Sala a la que queremos ir
-        SetSalaObj(salaDestino.gameObject);
+        SetSalaObj(salaDestino);
         //Calculamos como llegar desde la sala en la que nos encontramos
         CalculaCamino(salaActual, path);
 
@@ -102,7 +107,7 @@ public class Fantasma : MonoBehaviour
         //El fantasma no puede salir de la sala sin pulsar un boton
         if (path.Count == 0)
         {
-            objetoBarca = salaActual.BarcaDisponible(salaDestino.gameObject, out sentido);
+            objetoBarca = salaActual.BarcaDisponible(salaDestino, out sentido);
             if (!sentido)
             {
                 BarcaComportamiento b = objetoBarca.GetComponent<BarcaComportamiento>();
@@ -130,8 +135,8 @@ public class Fantasma : MonoBehaviour
             {
                 BarcaComportamiento b = objetoBarca.GetComponent<BarcaComportamiento>();
 
-                if (b.getEstadoBarca())navMeshAgent.SetDestination(b.GetObjetivo2().position);
-                else navMeshAgent.SetDestination(b.GetObjetivo1().position);
+                if (b.getEstadoBarca())navMeshAgent.SetDestination(b.GetObjetivo1().position);
+                else navMeshAgent.SetDestination(b.GetObjetivo2().position);
 
                 path.Remove(path[0]);
 
