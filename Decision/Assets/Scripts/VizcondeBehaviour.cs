@@ -103,6 +103,8 @@ public class VizcondeBehaviour : MonoBehaviour
                 Variables.Application.Set("LamparasCaidas", numLamparas);
                 Debug.Log("Lamparas Caidas: " + numLamparas);
             }
+
+
             if (obj.tag == "Cantante")
             {
                 //Consuela a la cantante

@@ -18,6 +18,7 @@ TagManager:
   - Lampara
   - Cantante
   - Sala
+  - ObjetivoSilla
   layers:
   - Default
   - TransparentFX
@@ -31,7 +32,7 @@ TagManager:
   - Publico
   - barca
   - cantante
-  - 
+  - butacas
   - 
   - 
   - 
