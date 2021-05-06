@@ -72,16 +72,7 @@ public class VizcondeBehaviour : MonoBehaviour
         GameObject obj = other.gameObject;
         if (Input.GetKeyDown(KeyCode.E)) 
         {
-            //Recoloca lampara
-            if (obj.CompareTag("Lampara") && obj.GetComponent<Rigidbody>().useGravity) 
-            {
-                obj.GetComponent<Rigidbody>().useGravity = false;
-                obj.transform.position = obj.GetComponentInParent<Transform>().position;
-                int numLamparas = (int)Variables.Application.Get("LamparasCaidas");
-                numLamparas--;
-                Variables.Application.Set("LamparasCaidas", numLamparas);    
-            }
-            else if (obj.CompareTag("Celda"))
+            if (obj.CompareTag("Celda"))
             {
                 //Para abrir la celda
                 //obj.GetComponent<ComportamientoCelda>().Abrir();
@@ -96,16 +87,33 @@ public class VizcondeBehaviour : MonoBehaviour
     private void OnCollisionStay(Collision collision)
     {
         GameObject obj = collision.gameObject;
-        if (obj.tag == "Cantante" && Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            //Consuela a la cantante
-            //obj.GetComponent<ComportamientoCantante>().setTranquila(true);
-        }
-        else if (obj.tag == "Objeto" && Input.GetKeyDown(KeyCode.E))
-        {
-            //Le pega a los objetos
-            //obj.getComponent<ComportamientoObjeto>().setGolpeado(true);
-            //GameObject.Find("Fantasma").setEnfadado()
+            //Recoloca lampara
+            if (obj.CompareTag("Lampara") && obj.GetComponent<Rigidbody>().useGravity)
+            {
+                Rigidbody rb = obj.GetComponent<Rigidbody>();
+                rb.useGravity = false;
+                rb.velocity = Vector3.zero;
+                obj.transform.localPosition = Vector3.zero;
+                obj.transform.localRotation = Quaternion.identity;
+
+                int numLamparas = (int)Variables.Application.Get("LamparasCaidas");
+                numLamparas--;
+                Variables.Application.Set("LamparasCaidas", numLamparas);
+                Debug.Log("Lamparas Caidas: " + numLamparas);
+            }
+            if (obj.tag == "Cantante")
+            {
+                //Consuela a la cantante
+                //obj.GetComponent<ComportamientoCantante>().setTranquila(true);
+            }
+            else if (obj.tag == "Objeto")
+            {
+                //Le pega a los objetos
+                //obj.getComponent<ComportamientoObjeto>().setGolpeado(true);
+                //GameObject.Find("Fantasma").setEnfadado()
+            }
         }
     }
 
