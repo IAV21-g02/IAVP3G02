@@ -38,21 +38,21 @@ public class PianoBehaviour : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && collision.gameObject.CompareTag("Vizconde") && !pianoDestruido)
         {
             CambiaEstadoPiano(true);
+            int estadoFantasma = (int)behaviorTree.GetVariable("Estado").GetValue();
+
+            //El fantasma se encuentra en una barca
+            if (estadoFantasma == 5)
+                behaviorTree.SetVariableValue("EstadoAnterior", (int)Estado.RepararMuebles);
+            //El fantasma se encuentra haciendo otra cosa
+            else
+                behaviorTree.SetVariableValue("Estado", (int)Estado.RepararMuebles);
+            
         }
         else if (collision.gameObject.CompareTag("Fantasma") && pianoDestruido)
         {
             CambiaEstadoPiano(false);
-            SharedInt estadoFantasma = (SharedInt)behaviorTree.GetVariable("Estado").GetValue();
-
-            if (estadoFantasma == (SharedInt)5)
-            { //El fantasma se encuentra en una barca
-                behaviorTree.SetVariableValue("EstadoAnterior", (int)Estado.RepararMuebles);
-            }
-            else
-            {
-                behaviorTree.SetVariableValue("Estado", (int)Estado.RepararMuebles);
-            }
-
+            //Si el fantasma arregla el piano se vuelve a buscar a la cantante
+            behaviorTree.SetVariableValue("Estado", (int)Estado.BuscandoCantante);
 
         }
     }

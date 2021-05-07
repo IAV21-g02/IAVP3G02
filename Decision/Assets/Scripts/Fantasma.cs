@@ -22,7 +22,6 @@ public class salaVisitada
 public class Fantasma : MonoBehaviour
 {
     public BehaviorTree behaviorTree;
-    public int Estado = 0;
     public List<GameObject> path;
     public salaVisitada[] salas;
     public SalaBehaviour salaInicial;
@@ -36,7 +35,7 @@ public class Fantasma : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        behaviorTree.SetVariableValue("Estado", Estado);
+        behaviorTree.SetVariableValue("Estado", 0);
         navMeshAgent = GetComponent<NavMeshAgent>();
         salaActual = salaInicial;
     }
@@ -48,6 +47,7 @@ public class Fantasma : MonoBehaviour
 
     public void OnCollisionEnter(Collision collision)
     {
+        int estado = (int)behaviorTree.GetVariable("Estado").GetValue();
         if (collision.gameObject.CompareTag("Sala") || collision.gameObject.CompareTag("Escenario")) 
         {
             //Se guarda la sala en la que se entra
@@ -58,7 +58,8 @@ public class Fantasma : MonoBehaviour
             }
             else behaviorTree.SetVariableValue("EstoyEnSalaBehaviour", false);
         }
-        else if (collision.gameObject.CompareTag("Cantante")) 
+        else if ( estado != (int)Estado.RepararMuebles && estado != (int) Estado.Noqueado
+            && collision.gameObject.CompareTag("Cantante")) 
         {
             setFantasmaEstado(1);
             behaviorTree.SetVariableValue("Atrapada", true);
@@ -290,6 +291,10 @@ public class Fantasma : MonoBehaviour
             return true;
         }
         else { return false;}
+    }
+
+    public void SetSalaActual(SalaBehaviour sala) {
+        salaActual = sala;
     }
     
 }

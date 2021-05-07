@@ -14,6 +14,10 @@ public class BarcaComportamiento : MonoBehaviour
     public PalancaBarca palancaBarca1;
     public PalancaBarca palancaBarca2;
 
+    private SalaBehaviour salaObjetivo1;
+    private SalaBehaviour salaObjetivo2;
+
+
 
     //  True si la barca está en el objetivo 1 : false objetivo 2
     private bool Estado = true;
@@ -30,6 +34,8 @@ public class BarcaComportamiento : MonoBehaviour
     void Start()
     {
         navMesh = GetComponent<NavMeshAgent>();
+        salaObjetivo1 = Objetivo1.GetComponentInParent<SalaBehaviour>();
+        salaObjetivo2 = Objetivo2.GetComponentInParent<SalaBehaviour>();
     }
 
 
@@ -68,11 +74,12 @@ public class BarcaComportamiento : MonoBehaviour
                     Fantasma fantasmita = currentCharacter.GetComponent<Fantasma>();
                     currentCharacter.GetComponent<NavMeshAgent>().enabled = true;
                     fantasmita.setFantasmaEstado(fantasmita.getEstadoAnterior());
+                    fantasmita.SetSalaActual(salaObjetivo1);
+
                 }
             }
             personaje = Character.None;
             currentCharacter = null;
-            //other.gameObject.GetComponentInParent<SalaBehaviour>().actualizaSala(gameObject);
 
         }
         else if (other.CompareTag("objetivoBarca2")&& Estado)
@@ -90,8 +97,9 @@ public class BarcaComportamiento : MonoBehaviour
                 if (personaje == Character.Fantasma)
                 {
                     Fantasma fantasmita = currentCharacter.GetComponent<Fantasma>();
-                    fantasmita.setFantasmaEstado(fantasmita.getEstadoAnterior());
                     currentCharacter.GetComponent<NavMeshAgent>().enabled = true;
+                    fantasmita.setFantasmaEstado(fantasmita.getEstadoAnterior());
+                    fantasmita.SetSalaActual(salaObjetivo2);
                 }
             }
             personaje = Character.None;
