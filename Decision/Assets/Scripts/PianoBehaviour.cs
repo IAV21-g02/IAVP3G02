@@ -20,9 +20,9 @@ public class PianoBehaviour : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Fantasma") && (int)behaviorTree.GetVariable("Estado").GetValue() == 2 )
+        if (other.gameObject.CompareTag("Fantasma") && (int)behaviorTree.GetVariable("Estado").GetValue() == 2)
         {
             behaviorTree.SetVariableValue("TocandoMusica", true);
         }

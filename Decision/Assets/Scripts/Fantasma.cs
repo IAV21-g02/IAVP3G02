@@ -61,6 +61,9 @@ public class Fantasma : MonoBehaviour
         else if (collision.gameObject.CompareTag("Cantante")) 
         {
             setFantasmaEstado(1);
+            behaviorTree.SetVariableValue("Atrapada", true);
+            collision.gameObject.GetComponent<NavMeshAgent>().enabled = false;
+            //TO DO hacer esto cuando al fantasma le rompen los muebles, cuando le noquean y cuando deja a la cantante en la celda
         }
     }
 
@@ -157,6 +160,7 @@ public class Fantasma : MonoBehaviour
 
                 if (b.getEstadoBarca())navMeshAgent.SetDestination(b.GetObjetivo1().position);
                 else navMeshAgent.SetDestination(b.GetObjetivo2().position);
+                navMeshAgent.Resume();
 
                 path.Remove(path[0]);
 
@@ -280,6 +284,16 @@ public class Fantasma : MonoBehaviour
     public void setCantanteAtrapada()
     {
         behaviorTree.SetVariableValue("Atrapada", true);
+    }
+
+    public bool EstoyEnSala(GameObject sala)
+    {
+        
+        if(sala == salaActual.gameObject)
+        {
+            return true;
+        }
+        else { return false;}
     }
     
 }
