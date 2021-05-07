@@ -19,6 +19,7 @@ TagManager:
   - Cantante
   - Sala
   - ObjetivoSilla
+  - Piano
   layers:
   - Default
   - TransparentFX

@@ -67,11 +67,6 @@ public class Fantasma : MonoBehaviour
         }
     }
 
-    public void BuscaCantante()
-    {
-        print("DONETE");
-    }
-
     public void puedoIrCaminando(Transform pos)
     {
         if (navMeshAgent.isActiveAndEnabled)
@@ -79,13 +74,13 @@ public class Fantasma : MonoBehaviour
             NavMeshPath path = new NavMeshPath();
             bool hayPath;
             NavMesh.CalculatePath(transform.position, pos.position, navMeshAgent.areaMask, path);
-            //Debug.Log("path " + path.corners[path.corners.Length - 1]);
-            //Debug.Log("pos " + pos.position);
-            if ((path.corners[path.corners.Length - 1] - pos.position).magnitude < 0.5)
-            {
-                hayPath = true;
-            }
+
+            Debug.Log("Corners del path: " + path.corners.Length);
+
+            if (path.corners.Length > 0 && (path.corners[path.corners.Length - 1] - pos.position).magnitude < 0.5) hayPath = true;
+            //else if (path.corners.Length == 0) hayPath = true;
             else hayPath = false;
+
             behaviorTree.SetVariableValue("PuedoIrCaminando", hayPath);
         }
     }
@@ -238,6 +233,7 @@ public class Fantasma : MonoBehaviour
     public void liberaCantante()
     {
         Variables.Application.Set("Secuestrada", false);
+        behaviorTree.SetVariableValue("Atrapada", false);
     }
 
     public void setFantasmaEstado(int nuEstado)

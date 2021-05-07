@@ -110,12 +110,6 @@ public class VizcondeBehaviour : MonoBehaviour
                 //Consuela a la cantante
                 //obj.GetComponent<ComportamientoCantante>().setTranquila(true);
             }
-            else if (obj.tag == "Objeto")
-            {
-                //Le pega a los objetos
-                //obj.getComponent<ComportamientoObjeto>().setGolpeado(true);
-                //GameObject.Find("Fantasma").setEnfadado()
-            }
         }
     }
 
