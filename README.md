@@ -80,9 +80,9 @@ Para facilitar la navegación y las conexiones entre las distintas áreas, hemos
 Esta herramienta se ha usado para dotar de inteligencia a los siguientes agentes: **Cantante** y **Público**, aunque también se usan algunos **Scripts** para mejorar su comportamiento.
 
 #### 4.1.1 **Público**
-El público se va a mover entre tres estados básicos: **Sentado**, **Moviéndose** y **EnVestíbulo**. Mientras está en sentado estará pendiente sobre la caída de las lámparas, de manera que cuando caiga alguna correrá hacia el vestíbulo (durante su estado moviéndose). Una vez llegue allí, pasará a estar en el estado *EnVestíbulo* que, al igual que en el estado sentado, esperará hasta que todas las lámparas estén en su sitio, en cuyo caso volverá a pasar a su estado moviéndose, para dirigirse hacia su asiento correspondiente y pasar a estado sentado de nuevo.
+El público se va a mover entre tres estados básicos: **Sentado**, **Corriendo** y **EnVestíbulo**. Mientras está en sentado estará pendiente sobre la caída de las lámparas, de manera que cuando caiga alguna, correrá hacia el vestíbulo (durante su estado _corriendo_). Una vez llegue allí, pasará a estar en el estado *EnVestíbulo* que, al igual que en el estado sentado, esperará hasta que todas las lámparas estén en su sitio, en cuyo caso volverá a pasar a su estado _corriendo_, para dirigirse hacia su asiento correspondiente y pasar a estado sentado de nuevo. También, durante el estado _corriendo_ estará pendiente sobre qué pasa con las lámparas, ya que antes de que llegue a su objetivo acutal las lámparas se podrían recolocar o volver a caer, de manera que cambiaría la dirección de su objetivo.
 
-![image](https://user-images.githubusercontent.com/47497948/117327879-5be39880-ae93-11eb-9f16-3a8e4705110e.png)
+![image](https://user-images.githubusercontent.com/47497948/117544536-494b9980-b022-11eb-8209-16b6f468464e.png)
 
 #### 4.1.2 **Cantante**
 La cantante es más compleja que el público. Ésta posee más estados: **CantandoEscenario**, **Secuestrada**, **Perdida**, **Encarcelada**, **Siguiendo**.
@@ -99,38 +99,80 @@ La cantante es más compleja que el público. Ésta posee más estados: **Cantan
 
 ![image](https://user-images.githubusercontent.com/47497948/117328697-2a1f0180-ae94-11eb-9a04-c9b692464674.png)
 
-### 4.2 Behaviour Designer
+### 4.2 Behaviour Designer - Fantasma
 Esta herramienta está siendo usada para generar la inteligencia del **Fantasma** aunque también se usan **Scripts** de apoyo para mejorar su comportamiento.
 
 Según como se muestra en la siguiente imagen, los estados del **Fantasma** se irán procesando según su prioridad (ramas izquierdas más prioritarias).
 
 Para empezar tenemos la acción **Entry** usada para entrar en el árbol de comportamiento, seguida de **Repeater** usada para estar preguntando en cada tick en qué estado debe estar. Finalmente se tiene un **Selector** utilizado para tomar decisiones sobre qué estado se debería procesar; en caso de que el estado de la izquierda no se pueda usar pasará de forma automática a procesar eL siguiente, el de la derecha.
 
-![image](https://user-images.githubusercontent.com/47497948/117334059-d9120c00-ae99-11eb-943b-e6ae706ad670.png)
+![image](https://user-images.githubusercontent.com/47497948/117545286-5f0e8e00-b025-11eb-817d-63fc50a5ad6c.png)
 
 A continuación se explicarán las diversas ramas de forma ordenada de izquierda a derecha:
 
 
-- **Navegando**:  en primer lugar, se comprueba si el fantasma está subido en alguna barca, dado que durante este estado no debería poder hacer ninguna otra acción más que esperar a llegar al destino de la barca.
+- **1 - Navegando**:  en primer lugar, se comprueba si el fantasma está subido en alguna barca, dado que durante este estado no debería poder hacer ninguna otra acción más que esperar a llegar al destino de la barca.
 
-- **Noqueado**: si no está navegando, se pregunta si el fantasma está noqueado, puesto que es el estado más prioritario, ya que inmoviliza por completo al fantasma durante un tiempo.
+- **2 - Noqueado**: si no está navegando, se pregunta si el fantasma está noqueado, puesto que es el estado más prioritario, ya que inmoviliza por completo al fantasma durante un tiempo.
 
-- **Muebles rotos**: por otro lado, tenemos los muebles rotos, dado que el **Fantasma** debería dejar todo lo que está haciendo para ir a comprobar sus objetos personales. Esta secuencia se encarga de asigar como objetivo la **Sala de Música**.
+- **3 - Muebles rotos**: por otro lado, tenemos los muebles rotos, dado que el **Fantasma** debería dejar todo lo que está haciendo para ir a comprobar sus objetos personales. Esta secuencia se encarga de asigar como objetivo la **Sala de Música**.
 
-- **CantanteEncontrada**: en caso de que el **fantasma** localice a la cantante irá a por ella para secuestrarla tan rápido cómo sea posible.
-Esta secuencia se encarga de asignar como objetivo a la **Cantante**.
+- **4 - CantanteEncontrada**: en caso de que el **Fantasma** esté buscando a la cantante y la vea (entre en su campo de visión) irá a por ella tan rápido como sea posible para secuestrarla.
 
-- **PuedoIrCaminando**: cuando el fantasma tenga un objetivo claro sobre dónde debe ir, lo primero que preguntará será si puede ir caminando (dado que hay que tener en cuenta que hay zonas conectadas únicamente con barcas). En caso de que pueda ir caminando se moverá.
+- **5 - CaminarHaciaCantante**: si la cantante no está en el rango de visión, entonces habrá que buscarla de manera que habrá que ir a comprobar si está en el escenario o en las bambalinas, de manera que el **Fantasma** se preguntará si puede ir caminando; si es así, tomará los comportamientos designados en esta secuencia.
 
-- **BarcaCantante**:
--
--
--
+- **6 - IrEnBarcaCantante**: si se ha llegado a este estado, quiere decir que no se puede ir caminando a por la cantante, por lo que habrá que coger las barcas, es decir, este estado determina cuál sería la mejor ruta de barcas a tomar para ir, posteriormente, caminando a por la cantante.
 
+- **7 - LlevarCantanteCeldaCaminando**: cuando el **Fantasma** tenga a la cantante entre sus brazos se la llevará a la celda, de manera que, al igual que antes, se preguntará si puede ir caminando; si es así, tomará los comportamientos designados en esta secuencia.
+
+- **8 - LlevarCantanteCeldaBarca**: en caso de que no pueda acceder a la celda caminando, entonces tomará la mejor ruta en barca hasta que pueda ir caminando hacia la celda.
+
+- **9 - TocarPiano**: cuando el **Fantasma** consiga, por fin, su objetivo se dirigirá a la sala de música para tocar el piano y disfrutar de su victoria. Dentro de esta secuencia determinará si puede ir caminando o ha de coger barcas, pero, en cualquier caso, se moverá hasta la sala de música.
 
 ### 4.3 Scripts
+- Relacionados con el fantasma:
+
+    - **Fantasma.cs**: script asoaciado al **Fantasma** que se encarga de gestionar y mejorar su comportamiento. Dentro de **Behaviour designer** se usan diversas funcionalidades de este script tales como: buscar caminos, buscar la mejor barca, gestión de colisiones (**__OnCollision y OnTrigger__**), secuestrar y soltar y a la cantante, entre otros.
+    - **FantasmaAnim.cs**: gestiona las animaciones del fantasma en función de su estado.
+    - **PianoBehaviour.cs**: detecta la colisión con el fantasma de manera que provoca que éste cambie de estado y pueda tocarlo. Además, gestiona el input en caso de que esté colisionando con el **Vizconde** para que lo pueda romper.
+
+-   Relacionados con las barcas:
+    - **BarcaComportamiento.cs**: gestiona el comportamiento de las barcas determinando quién está subido en la barca (**Fanstasma** o **Vizconde**), así como transportar por su tubería correspondente a cualquiera de los usuarios.
+    - **PalancaBarca.cs**: Llama a la barca de la tubería correspondiente en caso de que se encuentre alojado en el otro extremo del tunel.
+
+- Relacionados con la celda:
+    - **CeldaBehaviour.cs**: para conseguir que el fantasma suelte a la cantante dentro de la celda.
+    - **PalancaCeldaBehaviour.cs**: se usa para abrir la celda cuando la cantante esté encarcelada.
+
+- Relacionados con el escenario:
+    - **PalancaLampara.cs**: se usa para que el fantasma pueda tirar la lámpara asociada a la palanca para que el público huya despavorido.
+    - **LuzEscenario.cs**: se usa para crear un ambiente fiestero con las luces de la ópera, alternando su rotación.
+    - **PublicoContador.cs**: se encarga de contar el número de personas que se encuentrar dentro del vestíbulo, para así manejar con esos datos el comportamiento del fantasma que decide si atravesar el escenario.
+
+- Relacionados con la cantante:
+    - **SingerVision.cs**: determina si el Vizconde está en su rango de detección o no, avisando a los nodos de comportamientos construidos con la heramienta **Bolt** anteriormente mencionada para que proceda commo deba.
+    - **CantanteAnims.cs**: gestiona las animaciones de la cantante en función de su estado.
+
+- Relacionados con el Vizconde:
+    - **VizcondeAnim.cs**: gestiona las animaciones del Vizconde en función de su estado.
+    - **VizcondeBehaviour.cs**: gestiona el comportamiento por input del Vizconde, es decir, el movimiento, la gestión de cámaras y el botón para interactuar con el entorno.
+
+
 ## 5 Pruebas realizadas
 
+### 5.1 Muebles rotos
+
+- **Cantante secuestrada**: En este vídeo se observa el comportamiendo del **Fantasma** cuando le rompen los muebles y ha secuestrado a la cantante.
+[![image](https://user-images.githubusercontent.com/47497948/117545761-72225d80-b027-11eb-92e3-9f4f19884582.png)](https://www.youtube.com/watch?v=XLPWkCgSnvk&ab_channel=IA_UCM_Tester)
+
+- **Cantante en libertad**:  En este vídeo se observa el comportamiendo del **Fantasma** cuando le rompen los muebles y la cantante no ha sido secuestrada todavía.
+[![image](https://user-images.githubusercontent.com/47497948/117545818-b7df2600-b027-11eb-9420-17f9ac79bdfb.png)
+](https://www.youtube.com/watch?v=QmOxamvzS28&ab_channel=IA_UCM_Tester)
+
+### 5.2 Recorrido completo del fantasma
+En este vídeo se muestra un recorrido completo del **Fantasma**, es decir, desde el momento en que empieza la ejecución y decide ir a buscarla, hasta que la secuestra, la lleva a la celda y se va a tocar música para celebrar su victoria.
+
+[![image](https://user-images.githubusercontent.com/47497948/117546984-70f42f00-b02d-11eb-8be4-fe4fc213d172.png)](https://www.youtube.com/watch?v=Uprv-nw8kYE&ab_channel=IA_UCM_Tester)
 ## 6 Recursos de terceros empleados
 - Pseudocódigo del libro: [**AI for Games, Third Edition**](https://ebookcentral.proquest.com/lib/universidadcomplutense-ebooks/detail.action?docID=5735527) de **Millington**
 

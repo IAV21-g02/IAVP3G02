@@ -88,7 +88,6 @@ public class BarcaComportamiento : MonoBehaviour
             reposo = true;
             navMesh.enabled = false;
 
-            Debug.Log("OBEJTIVO 2");
             //Soltamos personaje
             if (currentCharacter != null)
             {
@@ -111,7 +110,7 @@ public class BarcaComportamiento : MonoBehaviour
     {
         if (personaje != Character.None && currentCharacter != null )
         {
-            currentCharacter.transform.SetPositionAndRotation(transform.position + new Vector3(0, 3, 0), Quaternion.identity);
+            currentCharacter.transform.SetPositionAndRotation(transform.position + new Vector3(0, 0, 0), Quaternion.identity);
         }
     }
 
@@ -123,7 +122,6 @@ public class BarcaComportamiento : MonoBehaviour
         if (status)
         {
             Estado = true;
-            Debug.Log(Objetivo2.position);
             navMesh.SetDestination(Objetivo2.position);
         }
         else

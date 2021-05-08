@@ -76,7 +76,7 @@ public class Fantasma : MonoBehaviour
             bool hayPath;
             NavMesh.CalculatePath(transform.position, pos.position, navMeshAgent.areaMask, path);
 
-            Debug.Log("Corners del path: " + path.corners.Length);
+            //Debug.Log("Corners del path: " + path.corners.Length);
 
             if (path.corners.Length > 0 && (path.corners[path.corners.Length - 1] - pos.position).magnitude < 0.5) hayPath = true;
             //else if (path.corners.Length == 0) hayPath = true;
@@ -161,7 +161,7 @@ public class Fantasma : MonoBehaviour
                 path.Remove(path[0]);
 
             }
-            else Debug.LogError("ESTO NO DEBERIA PASAR XD");
+            //else Debug.LogError("ESTO NO DEBERIA PASAR XD");
         }
 
     }
@@ -285,12 +285,9 @@ public class Fantasma : MonoBehaviour
 
     public bool EstoyEnSala(GameObject sala)
     {
-        
-        if(sala == salaActual.gameObject)
-        {
-            return true;
-        }
-        else { return false;}
+        Debug.Log(sala);
+        if(salaActual != null && sala == salaActual.gameObject) return true;
+        else  return false;
     }
 
     public void SetSalaActual(SalaBehaviour sala) {

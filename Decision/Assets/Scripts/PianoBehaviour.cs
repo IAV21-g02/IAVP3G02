@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using BehaviorDesigner.Runtime;
+using UnityEngine.AI;
 
 
 public class PianoBehaviour : MonoBehaviour
@@ -15,13 +16,18 @@ public class PianoBehaviour : MonoBehaviour
     {
         fantasma = behaviorTree.gameObject.GetComponent<Fantasma>();
     }
-    private void OnTriggerEnter(Collider other)
+
+    
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.gameObject.CompareTag("Fantasma") && (int)behaviorTree.GetVariable("Estado").GetValue() == 2)
+        if (collision.gameObject.CompareTag("Fantasma") && (int)behaviorTree.GetVariable("Estado").GetValue() == 2)
         {
             behaviorTree.SetVariableValue("TocandoMusica", true);
+            collision.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            collision.gameObject.GetComponent<NavMeshAgent>().isStopped = true;
         }
     }
+
 
     public void CambiaEstadoPiano(bool destruido)
     {
