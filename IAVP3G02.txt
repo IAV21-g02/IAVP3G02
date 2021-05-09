@@ -1,0 +1,13 @@
+Amaro Francisco Blest Polo
+Leyre Osés Sánchez
+Aurora García Jover
+Paula Martínez Martínez
+Stiven Arias Giraldo
+
+Descripción
+
+
+Enlace al repositorio -> https://github.com/IAV21-g02/IAVP1G02
+Enlace a la release/ejecutable -> https://github.com/IAV21-g02/IAVP1G02/releases/tag/1.0
+
+En README.md vienen los enlaces a los vídeos de prueba que hemos realizado.
