@@ -6,8 +6,26 @@ Stiven Arias Giraldo
 
 Descripción
 
+Se plantea un ejercicio basado en El fantasma de la Ópera, donde el fantasma estará controlado por la herramienta Behaviour
+Designer de Unity mediante la cual tomará decisiones de manera inteligente para ir a secuestrar a la cantante, reparar sus muebles,
+apagar las luces, tomar el mejor camino, etc. Por otro lado, la cantante y el público se han gestionado con Bolt para tomar 
+decisiones inteligentes como el fantasma. Por un lado, la cantante estará yendo y viniendo entre el escenario y las bambalinas 
+hasta que el fantasma la secuestre, en cuyo caso pasará a estar secuestrada. Si se consigue liberar mediante las distintas 
+acciones que pueda tomar el Vizconde (el jugador) pasará a estar merodeando perdida (si no reconoce el sitio), 
+a excepción de que detecte que el Vizonde anda cerca, en cuyo caso lo seguirá. Si el fantasma consigue llevar a la chica a la celda,
+entonces estará encarcelada hasta que el Vizconde la libere.
 
-Enlace al repositorio -> https://github.com/IAV21-g02/IAVP1G02
-Enlace a la release/ejecutable -> https://github.com/IAV21-g02/IAVP1G02/releases/tag/1.0
+Se han desarrollado las siguientes "features":
+    -Caída y reparación de lámparas,
+    -Movimiento de barcas
+    -Comportamiento de la cantante
+    -Comportamiento del publico en función de las lámparas
+    -Movimiento del vizconde e interacción del mismo con los objetos
+    -Árbol del comportamiento del fantasma
+    -Destrucción del piano
+
+
+Enlace al repositorio -> https://github.com/IAV21-g02/IAVP3G02
+Enlace a la release/ejecutable -> https://github.com/IAV21-g02/IAVP3G02/releases/tag/Release_v1.0
 
 En README.md vienen los enlaces a los vídeos de prueba que hemos realizado.

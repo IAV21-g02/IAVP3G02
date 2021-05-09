@@ -182,4 +182,4 @@ En este vídeo se muestra un recorrido completo del **Fantasma**, es decir, desd
 
 - [**ProBuilder**](https://unity3d.com/es/unity/features/worldbuilding/probuilder) para el diseño de las salas del escenario.
 
-- **Bolt** y **Behaviour Designer** para inteligencia artifical en **Unity**
+- [**Bolt**](https://unity.com/es/products/unity-visual-scripting) y [**Behaviour Designer**](https://opsive.com/assets/behavior-designer/) para inteligencia artificial en **Unity**
